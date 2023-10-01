@@ -1,0 +1,15 @@
+{
+ 
+  "dependencies": {
+  "express": "^4.14.0",
+  "os":"latest",
+  "path":"latest",
+  "fs":"latest"
+   
+},
+"scripts":{
+  "start": "node index.js"
+
+}
+
+}

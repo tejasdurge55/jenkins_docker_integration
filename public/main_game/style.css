@@ -1,0 +1,84 @@
+/* Reset default margin and padding */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Apply a background color to the body */
+body {
+  background-color: #f0f0f0;
+  font-family: Arial, sans-serif;
+}
+
+/* Center the container horizontally and add some spacing */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Style the center-div */
+.center-div {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  text-align: center;
+}
+
+/* Style the heading */
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Style the dice container */
+.two-dice-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Style the individual dice */
+.dice-1,
+.dice-2 {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  background-color: #f6e8e8;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Style the player text */
+.p-player {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Style the dice images */
+.dice-layout img {
+  width: 100px;
+  height: 100px;
+  border: 2px solid #333;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+  .two-dice-container {
+    flex-direction: column;
+  }
+  .dice-1,
+  .dice-2 {
+    margin-bottom: 10px;
+  }
+  .dice-1:last-child,
+  .dice-2:last-child {
+    margin-bottom: 0;
+  }
+}
