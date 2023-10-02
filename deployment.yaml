@@ -1,0 +1,47 @@
+#do with minikube mostly as it supports load balancing
+#minikube service blog-service -p minikube
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blog
+spec:
+  replicas: 5  # 5 replicas of Nginx
+  selector:
+    matchLabels:
+      name: blog
+  template:
+    metadata:
+      labels:
+        name: blog
+    spec:
+    
+      containers:
+      - name: node-dice-jenkins
+        image: tejasdurge55/node-dice-jenkins
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 3000
+
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: blog-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 3000
+    nodePort: 32000
+  selector:
+    name: blog  # Selector for pods
+
+    #docker kubernetes Loadbalancer command: kubectl port-forward service/blog-service 8099:80
+    #then app is visible at localhost:8099
+
+    #docker kubernetes NodePort command: kubectl port-forward service/blog-service 8099:80
+    #then app is visible at localhost:8099
+
