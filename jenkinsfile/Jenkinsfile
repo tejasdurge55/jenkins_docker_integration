@@ -129,15 +129,17 @@ pipeline {
         
         stage('Checkout kubernetes deployment files'){
            steps {
-                git 'https://github.com/tejasdurge55/dice-game-git-sync-node.git'
+                //git 'https://github.com/tejasdurge55/dice-game-git-sync-node.git'
+                 git url: "ssh://git@github.com:tejasdurge55/jenkins_docker_integration.git",
+                   credentialsId: 'anyuser'
            }
         }
         
         stage('Update K8S manifest & push to Repo'){
             steps {
                 script{
-                    withCredentials([usernamePassword(credentialsId: 'github-credentials', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                        //GIT_CREDS = credentials(github-credentials)
+   //                 withCredentials([gitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')
+  //      ]) {    //GIT_CREDS = credentials(github-credentials)
                         sh '''
                         cd argo-cd-folder
                         cat deployment.yaml                     
@@ -147,10 +149,13 @@ pipeline {
                         cat deployment.yaml
                         git add deployment.yaml
                         git commit -m 'Updated the deployment yaml | Jenkins Pipeline'
-                        git remote -v
-                        git push https://github.com/tejasdurge55/dice-game-git-sync-node.git HEAD:main
-                        '''                        
-                     }
+                       
+                       git push origin master
+                         ''' 
+                         //git remote -v
+                       // git push https://github.com/tejasdurge55/dice-game-git-sync-node.git HEAD:main
+                                              
+                    // }
                 }
             }
         }
