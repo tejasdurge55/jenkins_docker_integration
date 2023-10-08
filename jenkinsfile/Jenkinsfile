@@ -138,12 +138,11 @@ pipeline {
         stage('Update K8S manifest & push to Repo'){
             steps {
                 script{
-   //                 withCredentials([gitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')
-  //      ]) {    //GIT_CREDS = credentials(github-credentials)
-withCredentials([sshUserPrivateKey(credentialsId: 'anyuser', keyFileVariable: 'SSH_KEY')]) {
-  // sh("git push origin <local-branch>:<remote-branch>")
 
+withCredentials([usernamePassword(credentialsId: 'github-credentials', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         sh '''
+                        git config user.email tejas.y.durge@gmail.com
+                       git config user.name tejasdurge55
                         cd argo-cd-folder
                         cat deployment.yaml                     
                         current_number=$(head -n 1 deployment.yaml | sed 's/#//')             
@@ -155,11 +154,7 @@ withCredentials([sshUserPrivateKey(credentialsId: 'anyuser', keyFileVariable: 'S
                        
                        git push origin master
                          ''' 
-}
-                         //git remote -v
-                       // git push https://github.com/tejasdurge55/dice-game-git-sync-node.git HEAD:main
-                                              
-                    // }
+
                 }
             }
         }
