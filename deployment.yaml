@@ -1,3 +1,4 @@
+#1
 #do with minikube mostly as it supports load balancing
 #minikube service blog-service -p minikube
 
