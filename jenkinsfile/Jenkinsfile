@@ -129,9 +129,9 @@ pipeline {
         
         stage('Checkout kubernetes deployment files'){
            steps {
-                //git 'https://github.com/tejasdurge55/dice-game-git-sync-node.git'
-                 git url: "ssh://git@github.com:tejasdurge55/jenkins_docker_integration.git",
-                   credentialsId: 'anyuser'
+                git 'https://github.com/tejasdurge55/dice-game-git-sync-node.git'
+                // git url: "ssh://git@github.com:tejasdurge55/jenkins_docker_integration.git",
+                 //  credentialsId: 'anyuser'
            }
         }
         
@@ -140,6 +140,9 @@ pipeline {
                 script{
    //                 withCredentials([gitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')
   //      ]) {    //GIT_CREDS = credentials(github-credentials)
+withCredentials([sshUserPrivateKey(credentialsId: 'anyuser', keyFileVariable: 'SSH_KEY')]) {
+  // sh("git push origin <local-branch>:<remote-branch>")
+
                         sh '''
                         cd argo-cd-folder
                         cat deployment.yaml                     
@@ -152,6 +155,7 @@ pipeline {
                        
                        git push origin master
                          ''' 
+}
                          //git remote -v
                        // git push https://github.com/tejasdurge55/dice-game-git-sync-node.git HEAD:main
                                               
