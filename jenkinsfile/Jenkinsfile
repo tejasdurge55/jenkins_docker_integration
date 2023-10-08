@@ -152,7 +152,7 @@ withCredentials([usernamePassword(credentialsId: 'github-credentials', passwordV
                         git add deployment.yaml
                         git commit -m 'Updated the deployment yaml | Jenkins Pipeline'
                        
-                       git push origin master
+                       git push git@github.com:tejasdurge55/dice-game-git-sync-node.git
                          ''' 
 }
                 }
