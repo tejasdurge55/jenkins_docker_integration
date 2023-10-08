@@ -154,7 +154,7 @@ withCredentials([usernamePassword(credentialsId: 'github-credentials', passwordV
                        
                        git push origin master
                          ''' 
-
+}
                 }
             }
         }
