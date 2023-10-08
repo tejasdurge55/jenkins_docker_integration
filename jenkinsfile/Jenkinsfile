@@ -137,6 +137,7 @@ pipeline {
             steps {
                 script{
                     //withCredentials([usernamePassword(credentialsId: 'github-credentials')]) {
+                        GIT_CREDS = credentials(github-credentials)
                         sh '''
                         cd argo-cd-folder
                         cat deployment.yaml                     
@@ -147,7 +148,7 @@ pipeline {
                         git add deployment.yaml
                         git commit -m 'Updated the deployment yaml | Jenkins Pipeline'
                         git remote -v
-                        git push https://github.com/tejasdurge55/dice-game-git-sync-node.git 
+                        git push https://${GIT_CREDS_USR}:${GIT_CREDS_PSW}github.com/tejasdurge55/dice-game-git-sync-node.git 
                         '''                        
                     // }
                 }
