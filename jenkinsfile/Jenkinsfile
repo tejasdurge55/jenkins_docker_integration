@@ -164,6 +164,8 @@ pipeline {
 
                        sh '''
                            cd /tejas-git/dice-game-git-sync-node
+                           git add.
+                           git commit -m 'updated'
                            git push origin master --force
                           ''' 
 
