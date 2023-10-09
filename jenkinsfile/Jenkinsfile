@@ -163,6 +163,7 @@ pipeline {
                        //   ''' 
 
                        sh '''
+                           cd /tejas-git/dice-game-git-sync-node
                            git push origin master --force
                           ''' 
 
