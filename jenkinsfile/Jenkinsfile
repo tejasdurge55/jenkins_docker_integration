@@ -151,7 +151,7 @@ pipeline {
                         new_number=$((current_number + 1))  
                         cp deployment.yaml /tmp
                         sed -i -e "1s/.*/#$new_number/" /tmp/deployment.yaml
-                        cat /tmp/deployment.yaml >/tejas-git/dice-game-git-sync-node/argo-cd-folder/                  
+                        cat /tmp/deployment.yaml >/tejas-git/dice-game-git-sync-node/argo-cd-folder/deployment.yaml                  
                                         
                         cat deployment.yaml
                         git add deployment.yaml
