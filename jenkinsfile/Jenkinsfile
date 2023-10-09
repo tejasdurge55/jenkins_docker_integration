@@ -147,20 +147,25 @@ pipeline {
                         //   cp deployment.yaml /tmp
                         // sed -i -e "1s/.*/#$new_number/" /tmp/deployment.yaml
                         // cat /tmp/deployment.yaml >/tejas-git/dice-game-git-sync-node/argo-cd-folder/deployment.yaml  
-                        sh '''
+                       //  sh '''
                        
-                        cd /tejas-git/dice-game-git-sync-node/argo-cd-folder
-                        cat deployment.yaml                     
-                        current_number=$(head -n 1 deployment.yaml | sed 's/#//')             
-                        new_number=$((current_number + 1))  
-                        echo "$new_number" | cat >>  deployment.yaml              
+                       //  cd /tejas-git/dice-game-git-sync-node/argo-cd-folder
+                       //  cat deployment.yaml                     
+                       //  current_number=$(head -n 1 deployment.yaml | sed 's/#//')             
+                       //  new_number=$((current_number + 1))  
+                       //  echo "$new_number" | cat >>  deployment.yaml              
                                         
-                        cat deployment.yaml
-                        git add deployment.yaml
-                        git commit -m 'Updated the deployment yaml | Jenkins Pipeline'
+                       //  cat deployment.yaml
+                       //  git add deployment.yaml
+                       //  git commit -m 'Updated the deployment yaml | Jenkins Pipeline'
                        
-                       git push
-                         ''' 
+                       // git push
+                       //   ''' 
+
+                       sh '''
+                           git push origin master --force
+                          ''' 
+
 //}
                 }
             }
