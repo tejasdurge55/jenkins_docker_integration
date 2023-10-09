@@ -143,7 +143,7 @@ pipeline {
                       //git config user.email tejas.y.durge@gmail.com
                        //git config user.name tejasdurge55
                         sh '''
-                        git clone https://github.com/tejasdurge55/dice-game-git-sync-node.git
+                        //git clone https://github.com/tejasdurge55/dice-game-git-sync-node.git
                         cd /tejas-git/dice-game-git-sync-node/argo-cd-folder
                         cat deployment.yaml                     
                         current_number=$(head -n 1 deployment.yaml | sed 's/#//')             
