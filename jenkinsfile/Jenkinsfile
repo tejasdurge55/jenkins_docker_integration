@@ -88,84 +88,157 @@
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-pipeline {
+// pipeline {
     
-    agent any 
+//     agent any 
+    
+//     environment {
+//          IMAGE_TAG = "${BUILD_NUMBER}"
+//         dockerimagename = "tejasdurge55/dice-nodeapp-gitsync:'${BUILD_NUMBER}'"
+//         dockerImage = ""
+//     }
+    
+//     stages {
+        
+//         stage('Checkout'){
+//            steps {
+//                 git 'https://github.com/tejasdurge55/jenkins_docker_integration.git'
+//            }
+//         }
+
+//         stage('Build Docker'){
+//             steps{
+//                 script{
+//                     dockerImage = docker.build dockerimagename
+//                 }
+//             }
+//         }
+
+//         stage('Push the artifacts'){
+//             environment {
+//                registryCredential = 'docker-hub-credentials'
+//             }
+//             steps{
+//                 script {
+//                     docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
+//                    dockerImage.push()
+//                    // dockerImage.push("latest")
+//                     }
+//                 }
+//             }
+//         }
+        
+//         stage('Checkout kubernetes deployment files'){
+//            steps {
+//                 git 'https://github.com/tejasdurge55/dice-game-git-sync-node.git'
+//                 // git url: "ssh://git@github.com:tejasdurge55/jenkins_docker_integration.git",
+//                  //  credentialsId: 'anyuser'
+//            }
+//         }
+        
+//         stage('Update K8S manifest & push to Repo'){
+//             environment {
+//             GIT_REPO_NAME = "dice-game-git-sync-node"
+//             GIT_USER_NAME = "tejasdurge55"
+//         }
+//             steps {
+              
+
+//  withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
+//                     sh '''
+//                         git config user.email "tejas.y.durge@gmail.com"
+//                         git config user.name "Tejas Yogesh Durge"
+//                         current_number=$(head -n 1 argo-cd-folder/deployment.yaml | sed 's/#//')
+
+//                         # Increment the number by 1
+//                         new_number=$((current_number + 1))
+//                         BUILD_NUMBER=${BUILD_NUMBER}
+//                         # Replace the first line in deployment.yaml with the new number
+//                         sed -i "1s/.*/#$new_number/" argo-cd-folder/deployment.yaml
+//                           # Replace with your actual BUILD_NUMBER
+
+//                         # Use sed to replace the image tag
+//                         sed -i '36s|image: tejasdurge55/dice-nodeapp-gitsync|image: tejasdurge55/dice-nodeapp-gitsync:'"$BUILD_NUMBER"'|' argo-cd-folder/deployment.yaml
+//                         # Display the updated file
+//                         cat argo-cd-folder/deployment.yaml                        
+//                         git add argo-cd-folder/deployment.yaml
+//                         git commit -m "Update deployment image to new version"
+//                         git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:master
+//                     '''
+                    
+//                 }
+//             }
+//         }
+//     }
+// }
+//---------------------------------------------------------------------------------------------------------------
+pipeline {
+    agent any
     
     environment {
-         IMAGE_TAG = "${BUILD_NUMBER}"
-        dockerimagename = "tejasdurge55/dice-nodeapp-gitsync:'${BUILD_NUMBER}'"
-        dockerImage = ""
+        IMAGE_TAG = "${BUILD_NUMBER}"
+        DOCKER_IMAGE_NAME = "tejasdurge55/dice-nodeapp-gitsync:${BUILD_NUMBER}"
     }
     
     stages {
-        
-        stage('Checkout'){
-           steps {
+        stage('Checkout') {
+            steps {
                 git 'https://github.com/tejasdurge55/jenkins_docker_integration.git'
-           }
+            }
         }
 
-        stage('Build Docker'){
-            steps{
-                script{
-                    dockerImage = docker.build dockerimagename
+        stage('Build Docker') {
+            steps {
+                script {
+                    dockerImage = docker.build(DOCKER_IMAGE_NAME)
                 }
             }
         }
 
-        stage('Push the artifacts'){
+        stage('Push the artifacts') {
             environment {
-               registryCredential = 'docker-hub-credentials'
+                registryCredential = 'docker-hub-credentials'
             }
-            steps{
+            steps {
                 script {
-                    docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
-                   dockerImage.push()
-                   // dockerImage.push("latest")
+                    docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
+                        dockerImage.push()
                     }
                 }
             }
         }
-        
-        stage('Checkout kubernetes deployment files'){
-           steps {
-                git 'https://github.com/tejasdurge55/dice-game-git-sync-node.git'
-                // git url: "ssh://git@github.com:tejasdurge55/jenkins_docker_integration.git",
-                 //  credentialsId: 'anyuser'
-           }
-        }
-        
-        stage('Update K8S manifest & push to Repo'){
-            environment {
-            GIT_REPO_NAME = "dice-game-git-sync-node"
-            GIT_USER_NAME = "tejasdurge55"
-        }
+
+        stage('Checkout kubernetes deployment files') {
             steps {
-              
+                git 'https://github.com/tejasdurge55/dice-game-git-sync-node.git'
+            }
+        }
 
- withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
-                    sh '''
-                        git config user.email "tejas.y.durge@gmail.com"
-                        git config user.name "Tejas Yogesh Durge"
-                        current_number=$(head -n 1 argo-cd-folder/deployment.yaml | sed 's/#//')
+        stage('Update K8S manifest & push to Repo') {
+            environment {
+                GIT_REPO_NAME = "dice-game-git-sync-node"
+                GIT_USER_NAME = "tejasdurge55"
+            }
+            steps {
+                withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
+                    script {
+                        def current_number = readFile('argo-cd-folder/deployment.yaml').trim().replaceFirst('#', '')
+                        def new_number = (current_number as Integer) + 1
+                        BUILD_NUMBER = new_number.toString()
 
-                        # Increment the number by 1
-                        new_number=$((current_number + 1))
-                        BUILD_NUMBER=${BUILD_NUMBER}
-                        # Replace the first line in deployment.yaml with the new number
-                        sed -i "1s/.*/#$new_number/" argo-cd-folder/deployment.yaml
-                          # Replace with your actual BUILD_NUMBER
+                        sh '''
+                            git config user.email "tejas.y.durge@gmail.com"
+                            git config user.name "Tejas Yogesh Durge"
 
-                        # Use sed to replace the image tag
-                        sed -i '36s|image: tejasdurge55/dice-nodeapp-gitsync|image: tejasdurge55/dice-nodeapp-gitsync:'"$BUILD_NUMBER"'|' argo-cd-folder/deployment.yaml
-                        # Display the updated file
-                        cat argo-cd-folder/deployment.yaml                        
-                        git add argo-cd-folder/deployment.yaml
-                        git commit -m "Update deployment image to new version"
-                        git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:master
-                    '''
-                    
+                            sed -i "1s/.*/#$new_number/" argo-cd-folder/deployment.yaml
+                            sed -i '36s|image: tejasdurge55/dice-nodeapp-gitsync|image: tejasdurge55/dice-nodeapp-gitsync:'"$BUILD_NUMBER"'|' argo-cd-folder/deployment.yaml
+
+                            cat argo-cd-folder/deployment.yaml
+                            git add argo-cd-folder/deployment.yaml
+                            git commit -m "Update deployment image to new version"
+                            git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:master
+                        '''
+                    }
                 }
             }
         }
