@@ -121,7 +121,7 @@ pipeline {
             steps{
                 script {
                     docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
-                   dockerImage.push(IMAGE_TAG)
+                   dockerImage.push(${IMAGE_TAG})
                    // dockerImage.push("latest")
                     }
                 }
