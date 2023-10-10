@@ -121,7 +121,8 @@ pipeline {
             steps{
                 script {
                     docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
-                    dockerImage.push("latest")
+                   dockerImage.push(IMAGE_TAG)
+                   // dockerImage.push("latest")
                     }
                 }
             }
@@ -151,10 +152,13 @@ pipeline {
 
                         # Increment the number by 1
                         new_number=$((current_number + 1))
-                        
+                        BUILD_NUMBER=${BUILD_NUMBER}
                         # Replace the first line in deployment.yaml with the new number
                         sed -i "1s/.*/#$new_number/" argo-cd-folder/deployment.yaml
-                        
+                          # Replace with your actual BUILD_NUMBER
+
+                        # Use sed to replace the image tag
+                        sed -i '36s|image: tejasdurge55/dice-nodeapp-gitsync|image: tejasdurge55/dice-nodeapp-gitsync:'"$BUILD_NUMBER"'|' argo-cd-folder/deployment.yaml
                         # Display the updated file
                         cat argo-cd-folder/deployment.yaml                        
                         git add argo-cd-folder/deployment.yaml
