@@ -346,7 +346,7 @@ pipeline {
                         sed -i '36s@.*@'"$replacement"'@' argo-cd-folder/deployment.yaml
                         git config user.email "tejas.y.durge@gmail.com"
                         git config user.name "Tejas Yogesh Durge"
-                        git add $deployment_file
+                        git add .
                         git commit -m "Update deployment image to new version"
                         git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:master
                     '''
