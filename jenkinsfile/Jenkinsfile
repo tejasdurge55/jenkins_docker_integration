@@ -330,13 +330,20 @@ pipeline {
                         }
 
                         // Update the image tag in the deployment.yaml file
-                        sh "sed -i '36s|image: tejasdurge55/dice-nodeapp-gitsync:$existing_image_tag|image: tejasdurge55/dice-nodeapp-gitsync:$current_number|' $deployment_file"
+                       // sh "sed -i '36s|image: tejasdurge55/dice-nodeapp-gitsync:$existing_image_tag|image: tejasdurge55/dice-nodeapp-gitsync:$current_number|' $deployment_file"
 
                         // Display the updated deployment.yaml
-                        sh "cat $deployment_file"
+                        //sh "cat $deployment_file"
 
                         // Commit and push the changes to the Git repository
                         sh '''
+                        
+                        
+                        # Define the replacement value
+                        replacement="tejasdurge55/dice-nodeapp-gitsync:\"${BUILD_NUMBER}\""
+                        
+                        # Use sed to replace line 36 in the file
+                        sed -i '36s@.*@'"$replacement"'@' argo-cd-folder/deployment.yaml
                         git config user.email "tejas.y.durge@gmail.com"
                         git config user.name "Tejas Yogesh Durge"
                         git add $deployment_file
