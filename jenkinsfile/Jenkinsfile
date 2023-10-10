@@ -222,17 +222,37 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
                     script {
-                        def current_number = readFile('argo-cd-folder/deployment.yaml').trim().replaceFirst('#', '')
-                        def new_number = (current_number as Integer) + 1
-                        BUILD_NUMBER = new_number.toString()
+                        // def current_number = readFile('argo-cd-folder/deployment.yaml').trim().replaceFirst('#', '')
+                        // def new_number = (current_number as Integer) + 1
+                        // BUILD_NUMBER = new_number.toString()
+                        // sed -i "1s/.*/#$new_number/" argo-cd-folder/deployment.yaml
+                        //     sed -i '36s|image: tejasdurge55/dice-nodeapp-gitsync|image: tejasdurge55/dice-nodeapp-gitsync:'"$BUILD_NUMBER"'|' argo-cd-folder/deployment.yaml
+
 
                         sh '''
                             git config user.email "tejas.y.durge@gmail.com"
                             git config user.name "Tejas Yogesh Durge"
 
-                            sed -i "1s/.*/#$new_number/" argo-cd-folder/deployment.yaml
-                            sed -i '36s|image: tejasdurge55/dice-nodeapp-gitsync|image: tejasdurge55/dice-nodeapp-gitsync:'"$BUILD_NUMBER"'|' argo-cd-folder/deployment.yaml
+                           
+deployment_file="argo-cd-folder/deployment.yaml"
 
+# Get the current BUILD_NUMBER
+  # Replace with the actual BUILD_NUMBER
+
+# Check if there's an existing image tag
+existing_image_tag=$(grep -oE 'image: [^ ]+' "$deployment_file" | sed 's/image: //')
+
+if [ -z "$existing_image_tag" ]; then
+  # If there's no existing image tag, just add the BUILD_NUMBER
+  new_image_tag="image: tejasdurge55/dice-nodeapp-gitsync:${BUILD_NUMBER}"
+else
+  # If there's an existing image tag, remove it and add the BUILD_NUMBER
+  new_image_tag="image: tejasdurge55/dice-nodeapp-gitsync:${BUILD_NUMBER}"
+  sed -i "s/image: $existing_image_tag/$new_image_tag/g" "$deployment_file"
+fi
+
+# Display the updated deployment.yaml
+cat "$deployment_file"
                             cat argo-cd-folder/deployment.yaml
                             git add argo-cd-folder/deployment.yaml
                             git commit -m "Update deployment image to new version"
