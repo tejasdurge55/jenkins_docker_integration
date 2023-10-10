@@ -340,7 +340,7 @@ pipeline {
                         
                         
                         # Define the replacement value
-                        replacement="tejasdurge55/dice-nodeapp-gitsync:\"${BUILD_NUMBER}\""
+                        replacement="        image: tejasdurge55/dice-nodeapp-gitsync:\"${BUILD_NUMBER}\""
                         
                         # Use sed to replace line 36 in the file
                         sed -i '36s@.*@'"$replacement"'@' argo-cd-folder/deployment.yaml
