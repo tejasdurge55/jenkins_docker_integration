@@ -336,11 +336,13 @@ pipeline {
                         sh "cat $deployment_file"
 
                         // Commit and push the changes to the Git repository
+                        sh '''
                         git config user.email "tejas.y.durge@gmail.com"
                         git config user.name "Tejas Yogesh Durge"
                         git add $deployment_file
                         git commit -m "Update deployment image to new version"
                         git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:master
+                    '''
                     }
                 }
             }
