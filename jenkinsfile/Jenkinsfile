@@ -94,7 +94,7 @@ pipeline {
     
     environment {
         // IMAGE_TAG = "${BUILD_NUMBER}"
-        dockerimagename = "tejasdurge55/dice-nodeapp-gitsync"
+        dockerimagename = "tejasdurge55/dice-nodeapp-gitsync:${BUILD_NUMBER}"
         dockerImage = ""
     }
     
@@ -121,7 +121,7 @@ pipeline {
             steps{
                 script {
                     docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
-                   dockerImage.push(${IMAGE_TAG})
+                   dockerImage.push()
                    // dockerImage.push("latest")
                     }
                 }
